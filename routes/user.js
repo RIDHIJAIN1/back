@@ -1,6 +1,6 @@
 import express from "express";
 import { User } from "../models/user.js";
-import { blockUser, getAllUsers,  getUserDetails,logOut,loginFunc,newRegister, unblockUser, userCount  } from "../controller/user.js";
+import { editUser, getAllUsers,  getSingleUser,  getUserDetails,logOut,loginFunc,newRegister, userCount  } from "../controller/user.js";
 import { isAuthenticated } from "../middleware/auth.js";
 
 
@@ -8,12 +8,12 @@ const router = express.Router()
 
 router.post("/new",newRegister)     
 router.post("/login",loginFunc)
-
+router.get('/:id', getSingleUser); // Get user by ID
+router.put('/:id', editUser); // Edit user by ID
 router.get("/all",getAllUsers)
 router.get("/logout",logOut)
 router.get("/usercount",userCount)
-router.put("/block/:id", blockUser)
-router.put("/unblock/:id", unblockUser)
+
 
 
 

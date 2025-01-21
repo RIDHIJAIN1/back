@@ -51,7 +51,46 @@ export const newRegister = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+export const getSingleUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+      const user = await User.findById(id);
+      if (!user) {
+          return res.status(404).json({
+              success: false,
+              message: "User not found"
+          });
+      }
+      res.status(200).json({
+          success: true,
+          user
+      });
+  } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+  }
+};
 
+// Edit user by ID
+export const editUser = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body; // Get the fields to update from the request body
+
+  try {
+      const user = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+      if (!user) {
+          return res.status(404).json({
+              success: false,
+              message: "User not found"
+          });
+      }
+      res.status(200).json({
+          success: true,
+          user
+      });
+  } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+  }
+};
 // Get user details
 export const getUserDetails = (req, res) => {
     res.status(200).json({
@@ -118,30 +157,3 @@ export const logOut = (req, res) => {
 };
 
 // Block a user
-export const blockUser = async (req, res) => {
-    try {
-        const user = await User.findByIdAndUpdate(req.params.id, { blocked: true }, { new: true });
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        res.json({ success: true, user });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-};
-
-// Unblock a user
-export const unblockUser = async (req, res) => {
-    try {
-        const userId = req.params.id;
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        user.blocked = false;
-        await user.save();
-        res.json({ success: true, message: 'User unblocked successfully' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-};
