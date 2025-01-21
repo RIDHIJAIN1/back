@@ -8,11 +8,11 @@ const router = express.Router()
 
 router.post("/new",newRegister)     
 router.post("/login",loginFunc)
-router.get('/:id', getSingleUser); // Get user by ID
-router.put('/:id', editUser); // Edit user by ID
-router.get("/all",getAllUsers)
-router.get("/logout",logOut)
-router.get("/usercount",userCount)
+router.get('/:id',isAuthenticated, getSingleUser); // Get user by ID
+router.put('/:id',isAuthenticated, editUser); // Edit user by ID
+router.get("/", isAuthenticated,getAllUsers)
+router.get("/logout",isAuthenticated,logOut)
+router.get("/usercount",isAuthenticated,userCount)
 
 
 
